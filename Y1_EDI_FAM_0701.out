@@ -1,0 +1,606 @@
+Mplus VERSION 8.10 (Mac)
+MUTHEN & MUTHEN
+07/10/2023   1:42 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE:
+  	Y1_EDI
+  	;
+  	
+  DATA:
+  	FILE =
+  		myDB_230701.csv
+  	;
+
+  VARIABLE:
+  	NAMES =
+  		X_COVD
+  		Y1_EDI Y2_ANX Y3_DEP
+  		M1_FAM M2_PER
+  		C1_SEX C2_AGE
+  		;
+  	USEVARIABLES =
+    		X_COVD
+    		Y1_EDI
+    		M1_FAM !M2_PER
+  		C1_SEX C2_AGE
+    		;
+  	MISSING =	
+  		.
+  		;
+    		    		
+  ANALYSIS:
+  	TYPE = GENERAL;
+  	ESTIMATOR = ML;
+  	BOOTSTRAP = 10000;
+
+  OUTPUT:
+  	SAMPSTAT STDYX CINT(bcbootstrap)
+  	;
+  	
+  MODEL:
+  ! Y ON X + Mediators + Covariates
+  	Y1_EDI ON
+  		X_COVD
+  		M1_FAM !M2_PER
+  		C1_SEX C2_AGE
+  		;
+  ! Mediators ON X + Covariates
+  	M1_FAM ON
+  		X_COVD
+  		C1_SEX C2_AGE
+  		;
+  ! COVARIANCES
+  	X_COVD WITH C1_SEX;
+  	X_COVD WITH C2_AGE;
+  	C1_SEX WITH C2_AGE;
+  	!M2_PER WITH M1_FAM;
+  	
+  MODEL INDIRECT:
+  	Y1_EDI IND M1_FAM X_COVD;
+  	!Y1_EDI IND M2_PER X_COVD;
+
+  !or just with
+  !MODEL INDIRECT:
+  	!Y IND X;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+
+Y1_EDI
+;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         159
+
+Number of dependent variables                                    2
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   Y1_EDI      M1_FAM
+
+Observed independent variables
+   X_COVD      C1_SEX      C2_AGE
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Number of bootstrap draws
+    Requested                                                10000
+    Completed                                                10000
+
+Input data file(s)
+  myDB_230701.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI         1.000
+ M1_FAM         1.000         1.000
+ X_COVD         1.000         1.000         1.000
+ C1_SEX         1.000         1.000         1.000         1.000
+ C2_AGE         1.000         1.000         1.000         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+               64.885        43.706         0.000         1.522        11.964
+
+
+           Covariances
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI       123.460
+ M1_FAM       -50.108        96.836
+ X_COVD        11.066        -7.208        11.680
+ C1_SEX         0.815        -0.463         0.081         0.250
+ C2_AGE         0.954        -9.363         1.846        -0.202        11.260
+
+
+           Correlations
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI         1.000
+ M1_FAM        -0.458         1.000
+ X_COVD         0.291        -0.214         1.000
+ C1_SEX         0.147        -0.094         0.047         1.000
+ C2_AGE         0.026        -0.284         0.161        -0.121         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -2112.612
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     Y1_EDI               64.885      -0.252      39.300    3.77%      55.700     62.500     66.300
+             159.000     123.460      -0.310      88.500    1.89%      68.800     74.000
+     M1_FAM               43.706       0.231      23.100    0.63%      35.200     40.700     43.000
+             159.000      96.836      -0.400      63.100    8.81%      46.100     50.900
+     X_COVD                0.000       0.159      -7.893    0.63%      -2.893     -0.893      0.107
+             159.000      11.680      -0.265       8.107    2.52%       1.107      2.107
+     C1_SEX                1.522      -0.088       1.000   47.80%       1.000      1.000      2.000
+             159.000       0.250      -1.992       2.000   52.20%       2.000      2.000
+     C2_AGE               11.964      -0.048       5.100    0.63%       8.600     11.000     11.800
+             159.000      11.260      -1.026      17.600    1.26%      12.900     15.500
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.113D-13.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 20, C2_AGE
+
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       20
+
+Loglikelihood
+
+          H0 Value                       -2112.612
+          H1 Value                       -2112.612
+
+Information Criteria
+
+          Akaike (AIC)                    4265.225
+          Bayesian (BIC)                  4326.603
+          Sample-Size Adjusted BIC        4263.292
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+          90 Percent C.I.                    0.000  0.000
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                             71.534
+          Degrees of Freedom                     7
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ Y1_EDI   ON
+    X_COVD             0.693      0.242      2.860      0.004
+    M1_FAM            -0.497      0.091     -5.444      0.000
+    C1_SEX             1.786      1.480      1.207      0.227
+    C2_AGE            -0.410      0.274     -1.499      0.134
+
+ M1_FAM   ON
+    X_COVD            -0.475      0.222     -2.136      0.033
+    C1_SEX            -2.346      1.469     -1.597      0.110
+    C2_AGE            -0.796      0.240     -3.310      0.001
+
+ X_COVD   WITH
+    C1_SEX             0.081      0.135      0.599      0.549
+    C2_AGE             1.846      1.003      1.840      0.066
+
+ C1_SEX   WITH
+    C2_AGE            -0.202      0.131     -1.544      0.123
+
+ Means
+    X_COVD             0.000      0.271      0.000      1.000
+    C1_SEX             1.522      0.039     38.752      0.000
+    C2_AGE            11.964      0.264     45.308      0.000
+
+ Intercepts
+    Y1_EDI            88.795      6.741     13.172      0.000
+    M1_FAM            56.797      3.722     15.261      0.000
+
+ Variances
+    X_COVD            11.680      1.219      9.580      0.000
+    C1_SEX             0.250      0.003     90.537      0.000
+    C2_AGE            11.260      0.873     12.891      0.000
+
+ Residual Variances
+    Y1_EDI            89.823     11.077      8.109      0.000
+    M1_FAM            84.875      8.979      9.452      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ Y1_EDI   ON
+    X_COVD             0.213      0.070      3.052      0.002
+    M1_FAM            -0.440      0.079     -5.560      0.000
+    C1_SEX             0.080      0.067      1.199      0.231
+    C2_AGE            -0.124      0.082     -1.502      0.133
+
+ M1_FAM   ON
+    X_COVD            -0.165      0.076     -2.180      0.029
+    C1_SEX            -0.119      0.074     -1.603      0.109
+    C2_AGE            -0.271      0.081     -3.367      0.001
+
+ X_COVD   WITH
+    C1_SEX             0.047      0.080      0.596      0.551
+    C2_AGE             0.161      0.086      1.877      0.061
+
+ C1_SEX   WITH
+    C2_AGE            -0.121      0.078     -1.548      0.122
+
+ Means
+    X_COVD             0.000      0.080      0.000      1.000
+    C1_SEX             3.047      0.091     33.441      0.000
+    C2_AGE             3.566      0.167     21.395      0.000
+
+ Intercepts
+    Y1_EDI             7.991      0.662     12.067      0.000
+    M1_FAM             5.772      0.408     14.141      0.000
+
+ Variances
+    X_COVD             1.000      0.000    999.000    999.000
+    C1_SEX             1.000      0.000    999.000    999.000
+    C2_AGE             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    Y1_EDI             0.728      0.069     10.501      0.000
+    M1_FAM             0.876      0.052     16.853      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    Y1_EDI             0.272      0.069      3.932      0.000
+    M1_FAM             0.124      0.052      2.375      0.018
+
+
+TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Effects from X_COVD to Y1_EDI
+
+  Indirect             0.236      0.125      1.887      0.059
+
+
+STANDARDIZED TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Effects from X_COVD to Y1_EDI
+
+  Indirect             0.073      0.037      1.944      0.052
+
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ Y1_EDI   ON
+    X_COVD           0.084       0.234       0.300       0.693       1.099       1.175       1.351
+    M1_FAM          -0.716      -0.665      -0.639      -0.497      -0.340      -0.309      -0.246
+    C1_SEX          -1.997      -1.181      -0.731       1.786       4.174       4.652       5.486
+    C2_AGE          -1.079      -0.930      -0.839      -0.410       0.057       0.156       0.315
+
+ M1_FAM   ON
+    X_COVD          -1.043      -0.909      -0.834      -0.475      -0.104      -0.029       0.106
+    C1_SEX          -6.118      -5.248      -4.734      -2.346       0.072       0.531       1.581
+    C2_AGE          -1.411      -1.245      -1.172      -0.796      -0.380      -0.296      -0.150
+
+ X_COVD   WITH
+    C1_SEX          -0.261      -0.180      -0.139       0.081       0.309       0.349       0.434
+    C2_AGE          -0.681      -0.105       0.247       1.846       3.528       3.847       4.437
+
+ C1_SEX   WITH
+    C2_AGE          -0.555      -0.464      -0.424      -0.202       0.010       0.046       0.134
+
+ Means
+    X_COVD          -0.692      -0.509      -0.428       0.000       0.459       0.547       0.717
+    C1_SEX           1.415       1.447       1.459       1.522       1.585       1.597       1.623
+    C2_AGE          11.289      11.447      11.533      11.964      12.403      12.486      12.621
+
+ Intercepts
+    Y1_EDI          69.885      74.725      77.032      88.795      99.302     101.085     104.813
+    M1_FAM          47.088      49.427      50.743      56.797      62.888      64.179      66.475
+
+ Variances
+    X_COVD           8.819       9.495       9.884      11.680      13.881      14.291      15.187
+    C1_SEX           0.240       0.245       0.246       0.250       0.250       0.250       0.250
+    C2_AGE           9.150       9.628       9.920      11.260      12.802      13.092      13.683
+
+ Residual Variances
+    Y1_EDI          65.278      71.592      74.845      89.823     112.394     116.199     122.775
+    M1_FAM          64.915      69.807      72.555      84.875     102.616     105.550     111.424
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ Y1_EDI   ON
+    X_COVD           0.025       0.074       0.094       0.213       0.322       0.345       0.388
+    M1_FAM          -0.626      -0.583      -0.562      -0.440      -0.299      -0.273      -0.220
+    C1_SEX          -0.087      -0.052      -0.032       0.080       0.190       0.210       0.249
+    C2_AGE          -0.325      -0.278      -0.253      -0.124       0.017       0.048       0.098
+
+ M1_FAM   ON
+    X_COVD          -0.353      -0.309      -0.285      -0.165      -0.036      -0.011       0.037
+    C1_SEX          -0.305      -0.262      -0.238      -0.119       0.005       0.028       0.083
+    C2_AGE          -0.468      -0.420      -0.396      -0.271      -0.131      -0.103      -0.053
+
+ X_COVD   WITH
+    C1_SEX          -0.154      -0.107      -0.083       0.047       0.180       0.204       0.250
+    C2_AGE          -0.068      -0.015       0.016       0.161       0.297       0.324       0.374
+
+ C1_SEX   WITH
+    C2_AGE          -0.322      -0.274      -0.249      -0.121       0.008       0.030       0.082
+
+ Means
+    X_COVD          -0.209      -0.152      -0.127       0.000       0.134       0.159       0.214
+    C1_SEX           2.872       2.901       2.919       3.047       3.217       3.257       3.324
+    C2_AGE           3.175       3.258       3.302       3.566       3.842       3.903       4.022
+
+ Intercepts
+    Y1_EDI           6.137       6.567       6.807       7.991       9.003       9.225       9.621
+    M1_FAM           4.620       4.949       5.067       5.772       6.409       6.534       6.773
+
+ Variances
+    X_COVD           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    C1_SEX           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    C2_AGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    Y1_EDI           0.556       0.602       0.626       0.728       0.846       0.863       0.893
+    M1_FAM           0.737       0.778       0.798       0.876       0.955       0.966       0.980
+
+
+CONFIDENCE INTERVALS OF TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Effects from X_COVD to Y1_EDI
+
+  Indirect          -0.037       0.029       0.061       0.236       0.473       0.522       0.618
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Effects from X_COVD to Y1_EDI
+
+  Indirect          -0.012       0.008       0.018       0.073       0.141       0.156       0.181
+
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           LAMBDA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI             0             0             0             0             0
+ M1_FAM             0             0             0             0             0
+ X_COVD             0             0             0             0             0
+ C1_SEX             0             0             0             0             0
+ C2_AGE             0             0             0             0             0
+
+
+           THETA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI             0
+ M1_FAM             0             0
+ X_COVD             0             0             0
+ C1_SEX             0             0             0             0
+ C2_AGE             0             0             0             0             0
+
+
+           ALPHA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           BETA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI             0             6             7             8             9
+ M1_FAM             0             0            10            11            12
+ X_COVD             0             0             0             0             0
+ C1_SEX             0             0             0             0             0
+ C2_AGE             0             0             0             0             0
+
+
+           PSI
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI            13
+ M1_FAM             0            14
+ X_COVD             0             0            15
+ C1_SEX             0             0            16            17
+ C2_AGE             0             0            18            19            20
+
+
+     STARTING VALUES
+
+
+           NU
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI         1.000         0.000         0.000         0.000         0.000
+ M1_FAM         0.000         1.000         0.000         0.000         0.000
+ X_COVD         0.000         0.000         1.000         0.000         0.000
+ C1_SEX         0.000         0.000         0.000         1.000         0.000
+ C2_AGE         0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI         0.000
+ M1_FAM         0.000         0.000
+ X_COVD         0.000         0.000         0.000
+ C1_SEX         0.000         0.000         0.000         0.000
+ C2_AGE         0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+               64.885        43.706         0.000         1.522        11.964
+
+
+           BETA
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI         0.000         0.000         0.000         0.000         0.000
+ M1_FAM         0.000         0.000         0.000         0.000         0.000
+ X_COVD         0.000         0.000         0.000         0.000         0.000
+ C1_SEX         0.000         0.000         0.000         0.000         0.000
+ C2_AGE         0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              Y1_EDI        M1_FAM        X_COVD        C1_SEX        C2_AGE
+              ________      ________      ________      ________      ________
+ Y1_EDI        61.730
+ M1_FAM         0.000        48.418
+ X_COVD         0.000         0.000         5.840
+ C1_SEX         0.000         0.000         0.000         0.125
+ C2_AGE         0.000         0.000         0.000         0.000         5.630
+
+
+     Beginning Time:  13:42:16
+        Ending Time:  13:42:26
+       Elapsed Time:  00:00:10
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2023 Muthen & Muthen
